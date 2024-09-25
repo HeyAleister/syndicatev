@@ -5,7 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bestellungen</title>
     <style>
-        /* Hier kannst du das Design der Bestellungsseite anpassen */
+        /* Stil für die Bestellungsseite */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #password-form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="password"], button {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        li ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
     </style>
 </head>
 <body>
@@ -36,10 +72,13 @@
 
                 orders.forEach((order, index) => {
                     const orderElement = document.createElement('li');
-                    orderElement.innerHTML = `${order.name} (${order.contact}): €${order.totalPrice.toFixed(2)}
-                    <ul>
-                        ${order.items.map(item => `<li>${item.name} - €${item.price.toFixed(2)}</li>`).join('')}
-                    </ul>`;
+                    orderElement.innerHTML = `
+                        <strong>${order.name}</strong> (${order.contact}): €${order.totalPrice.toFixed(2)}
+                        <ul>
+                            ${order.items.map(item => `<li>${item.name} - €${item.price.toFixed(2)}</li>`).join('')}
+                        </ul>
+                        <p>Status: ${order.status}</p>
+                    `;
                     ordersList.appendChild(orderElement);
                 });
 

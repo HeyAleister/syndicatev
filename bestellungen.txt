@@ -1,3 +1,0 @@
-/dein-repo
-  |-- index.html
-  |-- bestellungen.txt

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestellungen</title>
+    <style>
+        /* Hier kannst du das Design der Bestellungsseite anpassen */
+    </style>
+</head>
+<body>
+    <h1>Gespeicherte Bestellungen</h1>
+    <div id="password-form">
+        <input type="password" id="password" placeholder="Passwort eingeben">
+        <button id="submit-password">Anzeigen</button>
+    </div>
+    <ul id="orders-list">
+        <!-- Gespeicherte Bestellungen werden hier angezeigt -->
+    </ul>
+
+    <script>
+        const password = 'passwort123'; // Einfaches Passwort für den Zugriff auf Bestellungen
+        let orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+        // Passwort zur Anzeige der Bestellungen überprüfen
+        document.getElementById('submit-password').addEventListener('click', () => {
+            const inputPassword = document.getElementById('password').value;
+            if (inputPassword === password) {
+                const ordersList = document.getElementById('orders-list');
+                ordersList.innerHTML = ''; // Leert die Liste der Bestellungen
+
+                if (orders.length === 0) {
+                    ordersList.innerHTML = '<li>Keine Bestellungen gefunden.</li>';
+                    return;
+                }
+
+                orders.forEach((order, index) => {
+                    const orderElement = document.createElement('li');
+                    orderElement.innerHTML = `${order.name} (${order.contact}): €${order.totalPrice.toFixed(2)}
+                    <ul>
+                        ${order.items.map(item => `<li>${item.name} - €${item.price.toFixed(2)}</li>`).join('')}
+                    </ul>`;
+                    ordersList.appendChild(orderElement);
+                });
+
+                document.getElementById('password-form').style.display = 'none'; // Versteckt das Passwortfeld
+            } else {
+                alert('Falsches Passwort. Bitte versuchen Sie es erneut.');
+            }
+        });
+    </script>
+</body>
+</html>

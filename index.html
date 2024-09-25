@@ -3,153 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marktplatz</title>
+    <title>Mein Online-Shop</title>
     <style>
-        /* Hier dein bestehendes CSS */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
-    <!-- Sidebar (HUD) -->
-    <div class="sidebar">
-        <h2>Kategorien</h2>
-        <ul>
-            <li><a href="#" class="category" data-category="alle">Alle Produkte</a></li>
-            <li><a href="#" class="category" data-category="elektronik">Elektronik</a></li>
-            <li><a href="#" class="category" data-category="kleidung">Kleidung</a></li>
-            <li><a href="#" class="category" data-category="lebensmittel">Lebensmittel</a></li>
-            <li><a href="#" class="category" data-category="warenkorb">Warenkorb</a></li>
-            <li><a href="bestellungen.html" class="category">Bestellungen</a></li> <!-- Link zur Bestellungen-Seite -->
-        </ul>
+    <h1>Willkommen in meinem Online-Shop</h1>
+    
+    <div class="item">
+        <h2>Produkt 1</h2>
+        <p>Beschreibung des Produkts 1.</p>
+        <button class="button" onclick="kaufen('Produkt 1', 29.99)">Kaufen für 29,99€</button>
     </div>
 
-    <!-- Hauptinhalt -->
-    <div id="product-view" class="main-content">
-        <h1>Produkte</h1>
-        <section id="product-list">
-            <!-- Hier werden die Produkte dynamisch hinzugefügt -->
-        </section>
+    <div class="item">
+        <h2>Produkt 2</h2>
+        <p>Beschreibung des Produkts 2.</p>
+        <button class="button" onclick="kaufen('Produkt 2', 39.99)">Kaufen für 39,99€</button>
     </div>
 
-    <!-- Warenkorb -->
-    <div id="cart-view" class="main-content">
-        <h1>Warenkorb</h1>
-        <aside id="cart">
-            <h2>Ihr Warenkorb</h2>
-            <ul id="cart-items">
-                <!-- Produkte im Warenkorb -->
-            </ul>
-            <p><strong>Gesamtpreis: €<span id="total-price">0.00</span></strong></p>
-            <label for="order-name">Bestellname:</label>
-            <input type="text" id="order-name" placeholder="Geben Sie einen Namen für die Bestellung ein">
-            <label for="contact">Kontakt:</label>
-            <input type="text" id="contact" placeholder="Geben Sie Kontaktinformationen ein">
-            <button id="checkout">Kaufen</button>
-        </aside>
+    <div class="item">
+        <h2>Produkt 3</h2>
+        <p>Beschreibung des Produkts 3.</p>
+        <button class="button" onclick="kaufen('Produkt 3', 19.99)">Kaufen für 19,99€</button>
     </div>
 
     <script>
-        let products = [
-            { id: 1, name: 'Laptop', price: 899.99, category: 'elektronik' },
-            { id: 2, name: 'Smartphone', price: 499.99, category: 'elektronik' },
-            { id: 3, name: 'T-Shirt', price: 19.99, category: 'kleidung' },
-            { id: 4, name: 'Hose', price: 39.99, category: 'kleidung' },
-            { id: 5, name: 'Äpfel', price: 2.99, category: 'lebensmittel' },
-            { id: 6, name: 'Brot', price: 1.99, category: 'lebensmittel' }
-        ];
-
-        let cart = [];
-        let orders = JSON.parse(localStorage.getItem('orders')) || []; // Bestellungen aus LocalStorage laden
-
-        // Produkte anzeigen
-        function displayProducts(category) {
-            const productList = document.getElementById('product-list');
-            productList.innerHTML = '';
-
-            const filteredProducts = products.filter(product => category === 'alle' || product.category === category);
-            filteredProducts.forEach(product => {
-                const productElement = document.createElement('div');
-                productElement.className = 'product';
-                productElement.innerHTML = `
-                    <h3>${product.name}</h3>
-                    <p>Preis: €${product.price.toFixed(2)}</p>
-                    <button onclick="addToCart(${product.id})">In den Warenkorb</button>
-                `;
-                productList.appendChild(productElement);
-            });
-        }
-
-        // Produkt in den Warenkorb legen
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            cart.push(product);
-            updateCart();
-        }
-
-        // Produkt aus dem Warenkorb entfernen
-        function removeFromCart(productId) {
-            cart = cart.filter(product => product.id !== productId);
-            updateCart();
-        }
-
-        // Warenkorb aktualisieren
-        function updateCart() {
-            const cartItems = document.getElementById('cart-items');
-            const totalPriceElement = document.getElementById('total-price');
-            cartItems.innerHTML = ''; // Leert die Warenkorbliste
-            let totalPrice = 0;
-
-            cart.forEach(product => {
-                const cartItem = document.createElement('li');
-                cartItem.innerHTML = `
-                    ${product.name} - €${product.price.toFixed(2)}
-                    <button onclick="removeFromCart(${product.id})">Entfernen</button>
-                `;
-                cartItems.appendChild(cartItem);
-                totalPrice += product.price;
-            });
-
-            totalPriceElement.innerText = totalPrice.toFixed(2);
-        }
-
-        // Kauf abschließen und Bestellungen speichern
-        document.getElementById('checkout').addEventListener('click', () => {
-            const orderName = document.getElementById('order-name').value;
-            const contact = document.getElementById('contact').value;
-
-            if (cart.length === 0) {
-                alert('Ihr Warenkorb ist leer. Bitte fügen Sie Produkte hinzu, bevor Sie kaufen.');
-                return;
-            }
-            if (!orderName) {
-                alert('Bitte geben Sie einen Namen für die Bestellung ein.');
-                return;
-            }
-            if (!contact) {
-                alert('Bitte geben Sie Kontaktinformationen ein.');
-                return;
-            }
-
-            const order = {
-                name: orderName,
-                contact: contact,
-                items: cart.slice(),
-                totalPrice: cart.reduce((sum, product) => sum + product.price, 0),
-                status: 'In Bearbeitung' // Standardstatus für neue Bestellungen
+        function kaufen(produkt, preis) {
+            let bestellung = {
+                produkt: produkt,
+                preis: preis,
+                datum: new Date().toLocaleString()
             };
 
-            orders.push(order);
-            localStorage.setItem('orders', JSON.stringify(orders)); // Speichert die Bestellung im LocalStorage
-
-            alert('Bestellung erfolgreich abgeschlossen!');
-            cart = []; // Warenkorb leeren
-            updateCart();
-
-            // Weiterleitung zur Bestellungen-Seite
-            window.location.href = 'bestellungen.html'; // Leitet den Nutzer nach dem Kauf zur Bestellungen-Seite weiter
-        });
-
-        // Standardkategorie anzeigen
-        displayProducts('alle');
+            // Bestellungsinformationen als JSON speichern
+            fetch('bestellungen.txt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bestellung)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert(produkt + " wurde erfolgreich gekauft!");
+                } else {
+                    alert("Fehler beim Kauf. Bitte versuchen Sie es später erneut.");
+                }
+            })
+            .catch(error => console.error('Fehler:', error));
+        }
     </script>
 </body>
 </html>
